@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
+use Auth;
+use Mail;
+
 class RegisterController extends Controller
 {
     /*
@@ -27,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/biodata/create';
+    protected $redirectTo = '/login';
 
     /**
      * Create a new controller instance.
@@ -47,46 +50,44 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        // if(Auth::attempt(['email' => $data['email'], 'password' => $data['password']])){
+        //     return redirect()->route('register');
+        // }else{
+            
+        // }
+
         return Validator::make($data, [
-            // 'name' => 'required|string|max:255',
-            // 'email' => 'required|string|email|max:255|unique:users',
-            // 'password' => 'required|string|min:6|confirmed',
-            'email' => 'required',
-            'password' => 'required',
-            'name' => 'required',
-            'role'      => '',
+            // 'name' => 'required|max:255',
+            // 'email' => 'required|email|max:255|unique:users',
+            // 'password' => 'required|min:6|confirmed',
+            'email' => 'required|unique:users,email',
+            'password' => 'required|',
         ]);
+        static::$errors = $validation->messages();
+        
     }
 
     /**
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return \App\User
+     * @return User
      */
     protected function create(array $data)
     {
-        // return $data;
+        $user = User::create([
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'role' => 'user',
+        ]);
 
-        // return User::create([
-        //     'username'  => $data['name'],
-        //     'email'     => $data['email'],
-        //     'role'      => 'user',
-        //     'password'  => bcrypt($data['password']),
-        // ]);
+        $note   = ['pesan' => 'Selamat, Anda sudah registerasi'];
 
-        $user = new User;
-        $user->username     = $data['name'];
-        $user->email        = $data['email'];
-        $user->password     = bcrypt($data['password']);
-        $user->role         = 'user';
-        $user->save();
+        Mail::send('email.pesan', $note, function($message) use($data)
+        {
+            $message->to($data['email'], '')->subject('Selamat');
+        });
 
         return $user;
-    }
-
-    public function showRegistrationForm() 
-    {
-        return view('auth.register');
     }
 }

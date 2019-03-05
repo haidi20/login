@@ -21,7 +21,7 @@
                     {{ $error }}<br>
                 @endforeach
               </h4>
-            </div>
+          </div>
           @endif
           <div class="account-wall">
             <h2 align="center">Masuk</h2>
@@ -35,6 +35,7 @@
               </button>
             </form>
               <h6 align="right" class="forget-password">Lupa Kata Sandi ? <a href="{{url('password/reset')}}" align="right"> Klik di sini</a></h6>
+              <h6 align="right" class="forget-password">Belum Registrasi <a href="{{url('register')}}" align="right"> Klik di sini</a></h6>
           </div>
         </div>
     </div>

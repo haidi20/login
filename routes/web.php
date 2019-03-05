@@ -1,21 +1,19 @@
 <?php
 Route::get('/',function(){
-  return redirect()->route('dashboard.index');
+  return redirect()->route('login');
 });
 
-Route::resource('dashboard', 'DashboardController');
+Route::group(['middleware' => 'auth'], function(){
+	Route::get('/user', function(){
+		return view('page.user');
+	})->middleware('user')->name('user');
 
-Route::group(['middleware' => 'auth'],function(){
-  Route::resource('pengaturan', 'PengaturanController');
-  Route::resource('biodata', 'BiodataController');
-  Route::resource('bidang', 'BidangController');
-  Route::resource('lowongan', 'LowonganController');
-  Route::resource('tanggungjawab', 'TanggungJawabController');
-  Route::resource('kualifikasi', 'KualifikasiController');
-
-  Route::get('lamaran', 'LamaranController@index')->name('lamaran.index');
-  Route::get('lamaran/terima', 'LamaranController@terima')->name('lamaran.terima');
+	Route::get('/admin', function(){
+		return view('page.admin');
+	})->middleware('admin')->name('admin');
 });
 
 //auth laravel
 Auth::routes();
+
+// Route::get('/home', 'HomeController@index')->name('home');

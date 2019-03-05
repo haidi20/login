@@ -15,36 +15,21 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav ukuran-huruf">
-        <li><a href="{{url('dashboard')}}" style="font-size:25px">E-rekrutmen Online</a></li>
+        <li><a href="{{url('dashboard')}}" style="font-size:25px">Testing</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right ukuran-huruf">
-        @if(!Auth::check())
-          <li><a href="{{url('register')}}" class="font-header">Daftar</a></li>
-          <li><a href="{{url('login')}}" class="font-header">Masuk</a></li>
-        @else
-        <li>
-          <a href="#" class="dropdown-toggle font-header" data-toggle="dropdown" role="button" aria-expanded="false">Pengguna <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="{{url('pengaturan')}}">Pengaturan</a></li>
-            @if(Auth::user()->role == 'user')
-            <li><a href="{{url('biodata')}}">Biodata</a></li>
-            @else
-            <li><a href="{{url('bidang')}}">Bidang</a></li>
-            <li><a href="{{route('lowongan.index')}}">Lowongan</a></li>
-            @endif
-          </ul>
-        </li>
-        <li>
-          <a href="{{url('/logout')}}"
-                  onclick="event.preventDefault();
-                  document.getElementById('logout-form').submit();" class="font-header">
-                  Keluar
-          </a>
+        @if(Auth::user())
+          <li>
+            <a href="{{url('/logout')}}"
+                    onclick="event.preventDefault();
+                    document.getElementById('logout-form').submit();" class="font-header">
+                    Keluar
+            </a>
 
-          <form id="logout-form" action="{{url('/logout')}}" method="POST" >
-              {{ csrf_field() }}
-          </form>
-        </li>
+            <form id="logout-form" action="{{url('/logout')}}" method="POST" >
+                {{ csrf_field() }}
+            </form>
+          </li>
         @endif
       </ul>
     </div>
