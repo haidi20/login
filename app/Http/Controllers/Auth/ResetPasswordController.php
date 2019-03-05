@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\ResetsPasswords;
@@ -36,5 +37,19 @@ class ResetPasswordController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+    }
+
+    public function reset()
+    {
+        $checkuser = User::where('email', request('email'))->first();
+        
+        if($checkuser){
+            $random = bin2hex(random_bytes(3));
+            
+            $checkuser->password = bcrypt($random);
+            $checkuser->save();
+
+            return view('auth.passwords.confirm', compact('random'));
+        }
     }
 }
